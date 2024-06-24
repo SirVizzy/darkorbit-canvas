@@ -1,0 +1,16 @@
+{
+  "name": "darkorbit-canvas",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/SirVizzy/darkorbit-canvas.git",
+  "author": "Martin <viziousdev@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "devDependencies": {
+    "parcel": "^2.12.0",
+    "typescript": "^5.5.2"
+  }
+}
