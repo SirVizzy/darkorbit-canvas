@@ -1,9 +1,12 @@
 import { canvas, ctx } from './canvas';
 import { Entity } from './entities/Entity';
+import { Streuner } from './entities/Streuner.Entity';
 import { player } from './player';
 import { GoliathSprite } from './sprites/Goliath.Sprite';
 
 const entity = new Entity(new GoliathSprite());
+
+const streuner = new Streuner();
 
 const draw = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -17,6 +20,7 @@ const draw = () => {
 
   // Draw entities relative to the camera offset
   entity.draw(ctx);
+  streuner.draw(ctx);
 
   // draw player on top.
   player.draw(ctx);

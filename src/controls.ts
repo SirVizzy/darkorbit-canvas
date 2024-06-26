@@ -35,8 +35,6 @@ export const bindControlListeners = () => {
       // Normalize the angle to be between 0 and 2*Math.PI (0 to 360 degrees)
       let normalizedAngle = angle >= 0 ? angle : 2 * Math.PI + angle;
 
-      console.log(angle);
-
       // Convert normalized angle to degrees
       player.setAngle(normalizedAngle);
     };

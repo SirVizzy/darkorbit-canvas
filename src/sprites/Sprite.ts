@@ -35,4 +35,12 @@ export class Sprite {
     this.active = new Image();
     this.active.src = this.sources[index];
   }
+
+  public height() {
+    if (this.active) {
+      return this.active.height;
+    }
+
+    return 0;
+  }
 }

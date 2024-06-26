@@ -8,8 +8,8 @@ export class Entity {
 
   private sprite: Sprite;
 
-  constructor(sprite: Sprite) {
-    this.current = new Vector(0, 0);
+  constructor(sprite: Sprite, current: Vector = new Vector(0, 0)) {
+    this.current = current;
     this.target = null;
     this.angle = 0;
     this.sprite = sprite;
@@ -25,10 +25,16 @@ export class Entity {
     this.sprite.draw(ctx);
     ctx.restore();
 
-    // draw position on top of the circle
-    const x = Math.round(this.current.x);
-    const y = Math.round(this.current.y);
-    ctx.fillText(`(${x}, ${y})`, this.current.x, this.current.y - 60);
+    ctx.save();
+    ctx.translate(this.current.x, this.current.y);
+    ctx.fillStyle = 'black';
+    ctx.font = 'bold 12px Arial';
+    ctx.textAlign = 'center';
+
+    ctx.fillText(this.constructor.name, 0, this.sprite.height() - 30);
+    ctx.fillText(`(${Math.floor(this.current.x)}, ${Math.floor(this.current.y)})`, 0, this.sprite.height() - 10);
+
+    ctx.restore();
   }
 
   public update() {
