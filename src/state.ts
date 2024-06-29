@@ -1,23 +1,13 @@
-import { Entity, Entity2 } from './entities/Entity';
-import { Goliath } from './entities/Goliath.Entity';
-import { Streuner } from './entities/Streuner.Entity';
+import { Entity } from './entities/Entity';
 import { player } from './player';
+import { BossDevolariumSprite } from './sprites/BossDevolarium.Sprite';
+import { SentinelSprite } from './sprites/Sentinel.Sprite';
+import { Sprite } from './sprites/Sprite';
+import { StreunerSprite } from './sprites/Streuner.Sprite';
 import { Vector } from './utils/Vector';
 
 //  new Entity(new GoliathSprite()
 export const entities: Entity[] = [];
-
-// Draw a bunch of streuners randomly
-// for (let i = 0; i < 10; i++) {
-//   const x = Math.random() * 750;
-//   const y = Math.random() * 750;
-
-//   // todo make entity target streuner and make them always aim towards the target
-
-//   const entity = new Streuner(new Vector(x, y));
-//   entity.mark(player);
-//   entities.push(entity);
-// }
 
 //  Draw a bunch of random streuners between -500 and 500 x and y
 const randomNumberBetween = (min: number, max: number) => Math.random() * (max - min) + min;
@@ -32,17 +22,42 @@ for (let i = 0; i < 100; i++) {
   const y = randomNumberBetween(-height, 2 * height);
 
   // Create either a Streuner or a Goliath with equal chances
-  const entity = Math.random() > 0.1 ? new Streuner(new Vector(x, y)) : new Goliath(new Vector(x, y));
 
-  // todo make entity target streuner and make them always aim towards the target
+  // take one random from sprite objects.
+  const sprites = [
+    {
+      sprite: new StreunerSprite(),
+      weight: 10,
+    },
+    {
+      sprite: new SentinelSprite(),
+      weight: 1,
+    },
+    {
+      sprite: new BossDevolariumSprite(),
+      weight: 1,
+    },
+  ];
 
-  // entity.target(player);
+  const getRandomSprite = () => {
+    const total = sprites.reduce((acc, sprite) => acc + sprite.weight, 0);
+    const random = Math.random() * total;
+
+    let sum = 0;
+    for (const sprite of sprites) {
+      sum += sprite.weight;
+      if (random < sum) {
+        return sprite.sprite;
+      }
+    }
+
+    return sprites[0].sprite as Sprite;
+  };
+
+  const entity = new Entity(getRandomSprite(), new Vector(x, y));
 
   entity.mark(player);
   entity.attack();
 
   entities.push(entity);
-
-  // const entity2 = new Entity2(new Vector(0, 0));
-  // entities.push(entity2);
 }

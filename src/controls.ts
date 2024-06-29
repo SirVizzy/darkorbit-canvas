@@ -55,7 +55,11 @@ export const bindControlListeners = () => {
   // check if user clicks on ctrl key
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Control') {
-      player.attack();
+      if (player.attacking) {
+        player.peace();
+      } else {
+        player.attack();
+      }
     }
   });
 };

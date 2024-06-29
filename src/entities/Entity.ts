@@ -10,9 +10,9 @@ export class Entity implements Drawable, Updateable {
 
   public target: Vector | null; // the target position of the entity
   public opponent: Entity | null; // the entity that this entity is targeting
+  public attacking: boolean; // is the entity attacking
 
   private angle: number; // the angle of the entity
-  private attacking: boolean; // is the entity attacking
   private health: Health; // the healthpoints of the entity
 
   constructor(sprite: Sprite, position: Vector = new Vector(0, 0)) {
@@ -98,6 +98,10 @@ export class Entity implements Drawable, Updateable {
     if (this.opponent) {
       this.attacking = true;
     }
+  }
+
+  public peace() {
+    this.attacking = false;
   }
 
   public mark(opponent: Entity) {

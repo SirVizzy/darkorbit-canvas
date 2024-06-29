@@ -16,6 +16,9 @@ const drawCircleAtOpponent = () => {
 const draw = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  ctx.fillStyle = 'white';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
   // Calculate canvas offset to center player
   const offsetX = canvas.width / 2 - player.position.x;
   const offsetY = canvas.height / 2 - player.position.y;
