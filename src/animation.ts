@@ -1,13 +1,6 @@
 import { canvas, ctx } from './canvas';
 import { player } from './player';
-import { Sprite } from './sprites/Sprite';
 import { entities } from './state';
-
-import sheet from './assets/ships/images/cyborg/spritesheet.png';
-
-const sheety = new Sprite(sheet);
-
-sheety.update(4);
 
 // TODO: Move responsibility to the entities.
 const drawCircleAtOpponent = () => {
@@ -31,20 +24,20 @@ const draw = () => {
   ctx.translate(offsetX, offsetY);
 
   // Draw entities relative to the camera offset
-  entities.forEach((entity) => entity.draw(ctx));
+  entities.forEach((entity) => {
+    entity.draw(ctx);
+  });
+
   drawCircleAtOpponent();
 
   // draw player on top.
   player.draw(ctx);
-  sheety.draw(ctx);
 
   ctx.restore();
 };
 
 const update = () => {
   player.update();
-
-  // update entities
   entities.forEach((entity) => entity.update());
 };
 

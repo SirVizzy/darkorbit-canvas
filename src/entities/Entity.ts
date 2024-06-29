@@ -61,7 +61,13 @@ export class Entity implements Drawable, Updateable {
     if (this.target) {
       const distance = this.target.subtract(this.position);
       const direction = distance.normalize().multiply(2);
-      this.position = this.position.add(direction);
+
+      const isCloseEnough = distance.length() < direction.length();
+      if (isCloseEnough) {
+        this.target = null;
+      } else {
+        this.position = this.position.add(direction);
+      }
     }
 
     if (this.opponent && this.attacking) {
