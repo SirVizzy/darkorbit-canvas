@@ -63,8 +63,6 @@ class Projectile implements Drawable, Updateable {
   public onHit(onHitHandler: (projectile: Projectile) => void) {
     this.onHitHandler = onHitHandler;
   }
-
-  private synchronize() {}
 }
 
 export class Entity implements Drawable, Updateable {
@@ -74,14 +72,14 @@ export class Entity implements Drawable, Updateable {
   public target: Vector | null; // the target position of the entity
   public opponent: Entity | null; // the entity that this entity is targeting
   public attacking: boolean; // is the entity attacking
+  public health: Health; // the healthpoints of the entity
 
   private angle: number; // the angle of the entity
-  private health: Health; // the healthpoints of the entity
   private projectiles: Projectile[]; // the projectiles of the entity
 
   private firedAt: number; // the last time the entity fired
 
-  constructor(sprite: Sprite, position: Vector = new Vector(0, 0)) {
+  constructor(sprite: Sprite, position: Vector, health: Health) {
     // classes
     this.position = position;
     this.sprite = sprite;
@@ -93,7 +91,7 @@ export class Entity implements Drawable, Updateable {
     // values
     this.angle = 0;
     this.attacking = false;
-    this.health = new Health(20000, 10000, 0);
+    this.health = health;
 
     // projectiles
     this.projectiles = [];
@@ -104,7 +102,17 @@ export class Entity implements Drawable, Updateable {
     // draw a box and set it to the angle
     ctx.save();
     ctx.translate(this.position.x, this.position.y);
-    this.sprite.draw(ctx);
+
+    if (this.health.dead) {
+      // Draw death animation (example: replace with actual animation logic)
+      ctx.fillStyle = 'black';
+      ctx.font = 'bold 100px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText('☠️', 0, 0);
+    } else {
+      this.sprite.draw(ctx);
+    }
+
     ctx.restore();
 
     ctx.save();
@@ -143,6 +151,13 @@ export class Entity implements Drawable, Updateable {
       } else {
         this.position = this.position.add(direction);
       }
+    }
+
+    // if opponent is dead, stop attacking
+    if (this.opponent && this.opponent.health.dead) {
+      this.opponent = null;
+      this.attacking = false;
+      this.projectiles = [];
     }
 
     if (this.opponent && this.attacking) {
@@ -200,12 +215,18 @@ export class Entity implements Drawable, Updateable {
 
   private fire() {
     console.log(`fire at ${this.opponent?.constructor.name}, range: ${this.isOpponentInRange()}`);
-    if (this.opponent && this.isOpponentInRange()) {
-      const projectile = new Projectile(this.position, this.opponent);
+
+    const opponent = this.opponent;
+    if (opponent && this.isOpponentInRange()) {
+      const projectile = new Projectile(this.position, opponent);
       this.projectiles.push(projectile);
 
       projectile.onHit((p) => {
         console.log('hit');
+
+        // reduce the health of the opponent
+        opponent.health.remove(Math.round(Math.random() * 1000));
+
         this.projectiles = this.projectiles.filter((projectile) => projectile !== p);
       });
     }

@@ -45,6 +45,13 @@ const draw = () => {
 const update = () => {
   player.update();
   entities.forEach((entity) => entity.update());
+
+  // Remove entities that are dead
+  entities.forEach((entity, index) => {
+    if (entity.health.dead) {
+      entities.splice(index, 1);
+    }
+  });
 };
 
 export const startAnimationLoop = () => {
