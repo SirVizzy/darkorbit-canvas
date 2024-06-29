@@ -1,4 +1,4 @@
-import { Entity } from './entities/Entity';
+import { Entity, Entity2 } from './entities/Entity';
 import { Goliath } from './entities/Goliath.Entity';
 import { Streuner } from './entities/Streuner.Entity';
 import { player } from './player';
@@ -36,7 +36,13 @@ for (let i = 0; i < 100; i++) {
 
   // todo make entity target streuner and make them always aim towards the target
 
+  // entity.target(player);
+
   entity.mark(player);
-  entity.setFollow(true);
+  entity.attack();
+
   entities.push(entity);
+
+  // const entity2 = new Entity2(new Vector(0, 0));
+  // entities.push(entity2);
 }

@@ -4,6 +4,6 @@ import { Entity } from './Entity';
 
 export class Streuner extends Entity {
   constructor(position: Vector) {
-    super(new StreunerSprite(), 1, position);
+    super(new StreunerSprite(), position);
   }
 }

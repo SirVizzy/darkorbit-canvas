@@ -1,47 +1,47 @@
-export class Sprite {
-  private active: HTMLImageElement | null = null;
+import { Drawable } from '../types/Drawable';
 
-  constructor(private sources: string[]) {}
+export class Sprite implements Drawable {
+  public width: number;
+  public height: number;
 
-  public draw(ctx: CanvasRenderingContext2D) {
-    if (this.active) {
-      ctx.drawImage(this.active, -this.active.width / 2, -this.active.height / 2);
-    }
+  private element: HTMLImageElement;
+
+  private index: number = 0;
+  private frames: number = 0;
+
+  constructor(src: string, width: number, height: number) {
+    this.width = width;
+    this.height = height;
+
+    this.element = new Image();
+    this.element.src = src;
+
+    this.element.onload = () => {
+      this.frames = this.element.width / this.width;
+    };
   }
 
-  public preloadAll() {
-    const promises = this.sources.map((src) => this.preload(src));
-    return Promise.all(promises).then((images) => {
-      this.active = images[0];
-    });
+  public draw(ctx: CanvasRenderingContext2D) {
+    if (this.element) {
+      ctx.drawImage(
+        this.element,
+        this.index * this.width,
+        0,
+        this.width,
+        this.height,
+        -this.width / 2,
+        -this.height / 2,
+        this.width,
+        this.height
+      );
+    }
   }
 
   public size() {
-    return this.sources.length;
+    return this.frames;
   }
 
   public update(index: number) {
-    this.active = new Image();
-
-    if (this.sources[index]) {
-      this.active.src = this.sources[index];
-    }
-  }
-
-  public height() {
-    if (this.active) {
-      return this.active.height;
-    }
-
-    return 0;
-  }
-
-  private preload(src: string): Promise<HTMLImageElement> {
-    return new Promise((resolve, reject) => {
-      const image = new Image();
-      image.src = src;
-      image.onload = () => resolve(image);
-      image.onerror = (error) => reject(error);
-    });
+    this.index = index;
   }
 }

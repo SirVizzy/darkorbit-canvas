@@ -5,6 +5,6 @@ import { Entity } from './Entity';
 
 export class Goliath extends Entity {
   constructor(position: Vector) {
-    super(new GoliathSprite(), 2, position);
+    super(new GoliathSprite(), position);
   }
 }

@@ -5,48 +5,57 @@ import { Vector } from './utils/Vector';
 
 // Mouse.getPositionRelativeToCanvas
 
+const isMouseOnAnyEntity = (mouse: Vector) => {
+  return entities.some((entity) => entity.atPositionOf(mouse));
+};
+
 export const bindControlListeners = () => {
   // on document click
   document.addEventListener('click', (event) => {
-    const rect = canvas.getBoundingClientRect();
-
-    const x = event.clientX - canvas.width / 2 + player.currentPosition.x;
-    const y = event.clientY - canvas.height / 2 + player.currentPosition.y;
+    const x = event.clientX - canvas.width / 2 + player.position.x;
+    const y = event.clientY - canvas.height / 2 + player.position.y;
 
     const mouse = new Vector(x, y);
 
     // check if clicked on entity.
     entities.forEach((entity) => {
-      if (entity.isMouseOnEntity(mouse)) {
-        console.log('clicked on entity', entity.constructor.name);
-        // convert mark to some target where you can set selected target
+      if (entity.atPositionOf(mouse)) {
+        player.mark(entity);
       }
     });
   });
 
-  document.addEventListener('mousedown', () => {
-    const move = (e: MouseEvent) => {
-      const x = e.clientX - canvas.width / 2 + player.currentPosition.x;
-      const y = e.clientY - canvas.height / 2 + player.currentPosition.y;
+  // mousemove make cursor pointer if over entity
+  document.addEventListener('mousemove', (event) => {
+    const x = event.clientX - canvas.width / 2 + player.position.x;
+    const y = event.clientY - canvas.height / 2 + player.position.y;
 
-      player.move(new Vector(x, y));
+    const mouse = new Vector(x, y);
 
-      // get angle and map it to a number between 1 and 16 for the sprite index
-      const angle = player.currentPosition.subtract(new Vector(x, y)).angle();
+    if (isMouseOnAnyEntity(mouse)) {
+      canvas.style.cursor = 'pointer';
+    } else {
+      canvas.style.cursor = 'default';
+    }
+  });
 
-      // Normalize the angle to be between 0 and 2*Math.PI (0 to 360 degrees)
-      let normalizedAngle = angle >= 0 ? angle : 2 * Math.PI + angle;
+  // on click move player to mouse position
+  document.addEventListener('click', (event) => {
+    const x = event.clientX - canvas.width / 2 + player.position.x;
+    const y = event.clientY - canvas.height / 2 + player.position.y;
 
-      // Convert normalized angle to degrees
-      player.setAngle(normalizedAngle);
-    };
+    const mouse = new Vector(x, y);
+    if (isMouseOnAnyEntity(mouse)) {
+      return;
+    }
 
-    const up = () => {
-      document.removeEventListener('mousemove', move);
-      document.removeEventListener('mouseup', up);
-    };
+    player.move(mouse);
+  });
 
-    document.addEventListener('mousemove', move);
-    document.addEventListener('mouseup', up);
+  // check if user clicks on ctrl key
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Control') {
+      player.attack();
+    }
   });
 };
