@@ -1,10 +1,10 @@
-import { Sprite } from '../sprites/Sprite';
-import { Drawable } from '../types/Drawable';
-import { Updateable } from '../types/Updateable';
-import { Vector } from '../utils/Vector';
-import { Health } from './Health';
-import { Projectile } from './Projectile';
-import { Reward } from './Reward';
+import { Sprite } from "../sprites/Sprite";
+import { Drawable } from "../types/Drawable";
+import { Updateable } from "../types/Updateable";
+import { Vector } from "../utils/Vector";
+import { Health } from "./Health";
+import { Projectile } from "./Projectile";
+import { Reward } from "./Reward";
 
 export class Entity implements Drawable, Updateable {
   public position: Vector; // position on the map
@@ -21,7 +21,12 @@ export class Entity implements Drawable, Updateable {
 
   private firedAt: number; // the last time the entity fired
 
-  constructor(sprite: Sprite, position: Vector, health: Health, reward: Reward) {
+  constructor(
+    sprite: Sprite,
+    position: Vector,
+    health: Health,
+    reward: Reward,
+  ) {
     // classes
     this.position = position;
     this.sprite = sprite;
@@ -49,10 +54,10 @@ export class Entity implements Drawable, Updateable {
 
     if (this.health.dead) {
       // Draw death animation (example: replace with actual animation logic)
-      ctx.fillStyle = 'black';
-      ctx.font = 'bold 100px Arial';
-      ctx.textAlign = 'center';
-      ctx.fillText('☠️', 0, 0);
+      ctx.fillStyle = "black";
+      ctx.font = "bold 100px Arial";
+      ctx.textAlign = "center";
+      ctx.fillText("☠️", 0, 0);
     } else {
       this.sprite.draw(ctx);
     }
@@ -61,15 +66,23 @@ export class Entity implements Drawable, Updateable {
 
     ctx.save();
     ctx.translate(this.position.x, this.position.y);
-    ctx.fillStyle = 'black';
-    ctx.font = 'bold 12px Arial';
-    ctx.textAlign = 'center';
+    ctx.fillStyle = "black";
+    ctx.font = "bold 12px Arial";
+    ctx.textAlign = "center";
 
     ctx.fillText(this.constructor.name, 0, this.sprite.height - 30);
-    ctx.fillText(`(${Math.floor(this.position.x)}, ${Math.floor(this.position.y)})`, 0, this.sprite.height - 10);
+    ctx.fillText(
+      `(${Math.floor(this.position.x)}, ${Math.floor(this.position.y)})`,
+      0,
+      this.sprite.height - 10,
+    );
 
     // log angle
-    ctx.fillText(`${Math.floor((this.angle * 180) / Math.PI)}°`, 0, this.sprite.height - 50);
+    ctx.fillText(
+      `${Math.floor((this.angle * 180) / Math.PI)}°`,
+      0,
+      this.sprite.height - 50,
+    );
 
     // draw text healthpoints above playter
     ctx.fillText(`Hull: ${this.health.hull}`, 0, -100);
@@ -90,6 +103,7 @@ export class Entity implements Drawable, Updateable {
       const direction = distance.normalize().multiply(2);
 
       const isCloseEnough = distance.length() < direction.length();
+
       if (isCloseEnough) {
         this.target = null;
       } else {
@@ -112,7 +126,9 @@ export class Entity implements Drawable, Updateable {
 
       // angle updated. set the sprite to the correct image.
       const images = this.sprite.size();
-      this.sprite.update(Math.floor((this.angle / (2 * Math.PI)) * images) % images);
+      this.sprite.update(
+        Math.floor((this.angle / (2 * Math.PI)) * images) % images,
+      );
 
       // fire projectile every second
       if (now - this.firedAt >= 1000) {
@@ -126,7 +142,9 @@ export class Entity implements Drawable, Updateable {
 
       // angle updated. set the sprite to the correct image.
       const images = this.sprite.size();
-      this.sprite.update(Math.floor((this.angle / (2 * Math.PI)) * images) % images);
+      this.sprite.update(
+        Math.floor((this.angle / (2 * Math.PI)) * images) % images,
+      );
     }
 
     // update projectiles
@@ -158,20 +176,25 @@ export class Entity implements Drawable, Updateable {
   }
 
   private fire() {
-    console.log(`fire at ${this.opponent?.constructor.name}, range: ${this.isOpponentInRange()}`);
+    console.log(
+      `fire at ${this.opponent?.constructor.name}, range: ${this.isOpponentInRange()}`,
+    );
 
     const opponent = this.opponent;
+
     if (opponent && this.isOpponentInRange()) {
       const projectile = new Projectile(this.position, opponent);
       this.projectiles.push(projectile);
 
       projectile.onHit((p) => {
-        console.log('hit');
+        console.log("hit");
 
         // reduce the health of the opponent
         opponent.health.remove(Math.round(Math.random() * 10000));
 
-        this.projectiles = this.projectiles.filter((projectile) => projectile !== p);
+        this.projectiles = this.projectiles.filter(
+          (projectile) => projectile !== p,
+        );
       });
     }
   }

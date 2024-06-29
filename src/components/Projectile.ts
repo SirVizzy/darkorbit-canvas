@@ -1,7 +1,7 @@
-import { Drawable } from '../types/Drawable';
-import { Updateable } from '../types/Updateable';
-import { Vector } from '../utils/Vector';
-import { Entity } from './Entity';
+import { Drawable } from "../types/Drawable";
+import { Updateable } from "../types/Updateable";
+import { Vector } from "../utils/Vector";
+import { Entity } from "./Entity";
 
 export class Projectile implements Drawable, Updateable {
   public position: Vector;
@@ -27,6 +27,14 @@ export class Projectile implements Drawable, Updateable {
     this.onHitHandler = () => {};
   }
 
+  public callToFunction() {}
+
+  public test() {
+    const variable = "tr";
+
+    return variable;
+  }
+
   public draw(ctx: CanvasRenderingContext2D) {
     ctx.save();
     ctx.translate(this.position.x, this.position.y);
@@ -35,7 +43,7 @@ export class Projectile implements Drawable, Updateable {
     if (!this.hit) {
       ctx.beginPath();
       ctx.arc(0, 0, 5, 0, 2 * Math.PI);
-      ctx.fillStyle = 'red';
+      ctx.fillStyle = "red";
       ctx.fill();
     }
 
@@ -45,14 +53,16 @@ export class Projectile implements Drawable, Updateable {
   public update() {
     if (!this.hit) {
       const elapsed = Date.now() - this.firedAt;
-
       // move the projectile towards the target
       const distance = this.target.position.subtract(this.position);
       const direction = distance.normalize().multiply(2);
 
       this.position = this.position.add(direction);
 
-      if (elapsed >= this.duration || this.position.distance(this.target.position) < 10) {
+      if (
+        elapsed >= this.duration ||
+        this.position.distance(this.target.position) < 10
+      ) {
         this.onHitHandler(this);
         this.hit = true;
       }

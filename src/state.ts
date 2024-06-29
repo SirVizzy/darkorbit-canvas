@@ -1,5 +1,5 @@
-import { Streuner } from './entities/Streuner.Entity';
-import { EntityManager } from './managers/EntityManager';
+import { Streuner } from "./entities/Streuner.Entity";
+import { EntityManager } from "./managers/EntityManager";
 
 export const entityManager = new EntityManager();
 

@@ -1,7 +1,7 @@
-import { canvas } from './canvas';
-import { player } from './player';
-import { entityManager } from './state';
-import { Vector } from './utils/Vector';
+import { canvas } from "./canvas";
+import { player } from "./player";
+import { entityManager } from "./state";
+import { Vector } from "./utils/Vector";
 
 // Mouse.getPositionRelativeToCanvas
 
@@ -13,7 +13,7 @@ export const bindControlListeners = () => {
   let isMouseDown = false;
 
   // Handle mouse down event
-  document.addEventListener('mousedown', (event) => {
+  document.addEventListener("mousedown", (event) => {
     if (event.button === 0) {
       // Left mouse button
       isMouseDown = true;
@@ -24,7 +24,7 @@ export const bindControlListeners = () => {
   });
 
   // Handle mouse up event
-  document.addEventListener('mouseup', (event) => {
+  document.addEventListener("mouseup", (event) => {
     if (event.button === 0) {
       // Left mouse button
       isMouseDown = false;
@@ -39,9 +39,9 @@ export const bindControlListeners = () => {
 
     // Check if mouse is over any entity
     if (isMouseOnAnyEntity(mouse) && !isMouseDown) {
-      canvas.style.cursor = 'pointer';
+      canvas.style.cursor = "pointer";
     } else {
-      canvas.style.cursor = 'default';
+      canvas.style.cursor = "default";
     }
 
     // Move player if mouse button is down and not over any entity
@@ -50,10 +50,10 @@ export const bindControlListeners = () => {
     }
   };
 
-  document.addEventListener('mousemove', handleMouseMove);
+  document.addEventListener("mousemove", handleMouseMove);
 
   // Handle click event (for selection)
-  document.addEventListener('click', (event) => {
+  document.addEventListener("click", (event) => {
     const x = event.clientX - canvas.width / 2 + player.position.x;
     const y = event.clientY - canvas.height / 2 + player.position.y;
     const mouse = new Vector(x, y);
@@ -73,8 +73,8 @@ export const bindControlListeners = () => {
   });
 
   // Check if user clicks on ctrl key
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Control') {
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Control") {
       if (player.attacking) {
         player.peace();
       } else {

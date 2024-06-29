@@ -1,8 +1,8 @@
-import { Entity } from '../components/Entity';
-import { Streuner } from '../entities/Streuner.Entity';
-import { player } from '../player';
-import { Updateable } from '../types/Updateable';
-import { Vector } from '../utils/Vector';
+import { Entity } from "../components/Entity";
+import { Streuner } from "../entities/Streuner.Entity";
+import { player } from "../player";
+import { Updateable } from "../types/Updateable";
+import { Vector } from "../utils/Vector";
 
 type EntityConstructor = new (position: Vector) => Entity;
 
@@ -29,7 +29,8 @@ export class EntityManager implements Updateable {
   }
 
   private countOf(constructor: EntityConstructor) {
-    return this.entities.filter((entity) => entity instanceof constructor).length;
+    return this.entities.filter((entity) => entity instanceof constructor)
+      .length;
   }
 
   private spawn(Entity: EntityConstructor) {
@@ -44,7 +45,9 @@ export class EntityManager implements Updateable {
     entity.attack();
     this.entities.push(entity);
 
-    console.log(`New ${Entity.name} created at (${randomX}, ${randomY}). Total ${Entity.name}s: ${this.countOf(Entity)}`);
+    console.log(
+      `New ${Entity.name} created at (${randomX}, ${randomY}). Total ${Entity.name}s: ${this.countOf(Entity)}`,
+    );
   }
 }
 

@@ -1,14 +1,20 @@
-import { canvas, ctx } from './canvas';
-import { player } from './player';
-import { entityManager } from './state';
+import { canvas, ctx } from "./canvas";
+import { player } from "./player";
+import { entityManager } from "./state";
 
 // TODO: Move responsibility to the entities.
 const drawCircleAtOpponent = () => {
   const opponent = player.opponent;
   if (opponent) {
     ctx.beginPath();
-    ctx.arc(opponent.position.x, opponent.position.y, opponent.sprite.height / 2, 0, Math.PI * 2);
-    ctx.fillStyle = 'red';
+    ctx.arc(
+      opponent.position.x,
+      opponent.position.y,
+      opponent.sprite.height / 2,
+      0,
+      Math.PI * 2,
+    );
+    ctx.fillStyle = "red";
     ctx.globalAlpha = 0.5;
     ctx.fill();
   }
@@ -19,7 +25,7 @@ const drawCircleAtOpponent = () => {
 const draw = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = 'white';
+  ctx.fillStyle = "white";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // Calculate canvas offset to center player
@@ -42,9 +48,9 @@ const draw = () => {
   ctx.restore();
 
   // draw player urdiium and credits
-  ctx.fillStyle = 'black';
-  ctx.font = 'bold 12px Arial';
-  ctx.textAlign = 'left';
+  ctx.fillStyle = "black";
+  ctx.font = "bold 12px Arial";
+  ctx.textAlign = "left";
   ctx.fillText(`Uridium: ${player.bank.uridium}`, 40, 40);
   ctx.fillText(`Credits: ${player.bank.credits}`, 40, 60);
 };
