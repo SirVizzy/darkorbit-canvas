@@ -1,6 +1,7 @@
-import { Bank } from './Bank';
-import { Entity } from './entities/Entity';
-import { Health } from './entities/Health';
+import { Bank } from './components/Bank';
+import { Entity } from './components/Entity';
+import { Health } from './components/Health';
+import { Reward } from './components/Reward';
 import { PhoenixSprite } from './sprites/Phoenix.Sprite';
 import { Updateable } from './types/Updateable';
 import { Vector } from './utils/Vector';
@@ -9,7 +10,7 @@ class Player extends Entity implements Updateable {
   public bank: Bank;
 
   constructor() {
-    super(new PhoenixSprite(), new Vector(0, 0), new Health(200000, 100000, 0));
+    super(new PhoenixSprite(), new Vector(0, 0), new Health(200000, 100000, 0), new Reward(0, 0));
 
     this.bank = new Bank(0, 0);
   }
@@ -18,12 +19,12 @@ class Player extends Entity implements Updateable {
     super.update();
 
     if (this.opponent && this.opponent.health.dead) {
-      this.onEnemyKilled();
+      this.onEnemyKilled(this.opponent);
     }
   }
 
-  private onEnemyKilled() {
-    this.bank.add(100, 100);
+  private onEnemyKilled(opponent: Entity) {
+    this.bank.add(opponent.reward.uridium, opponent.reward.credits);
   }
 }
 

@@ -1,6 +1,6 @@
 import { canvas, ctx } from './canvas';
 import { player } from './player';
-import { entities } from './state';
+import { entities, entityManager } from './state';
 
 // TODO: Move responsibility to the entities.
 const drawCircleAtOpponent = () => {
@@ -59,6 +59,8 @@ const update = () => {
       entities.splice(index, 1);
     }
   });
+
+  entityManager.update();
 };
 
 export const startAnimationLoop = () => {

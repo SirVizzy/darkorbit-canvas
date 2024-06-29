@@ -14,14 +14,14 @@ export class Entity implements Drawable, Updateable {
   public opponent: Entity | null; // the entity that this entity is targeting
   public attacking: boolean; // is the entity attacking
   public health: Health; // the healthpoints of the entity
+  public reward: Reward; // the reward of the entity
 
   private angle: number; // the angle of the entity
   private projectiles: Projectile[]; // the projectiles of the entity
 
   private firedAt: number; // the last time the entity fired
-  private reward: Reward; // the reward of the entity
 
-  constructor(sprite: Sprite, position: Vector, health: Health) {
+  constructor(sprite: Sprite, position: Vector, health: Health, reward: Reward) {
     // classes
     this.position = position;
     this.sprite = sprite;
@@ -39,7 +39,7 @@ export class Entity implements Drawable, Updateable {
     this.projectiles = [];
     this.firedAt = Date.now();
 
-    this.reward = new Reward(100, 100);
+    this.reward = reward;
   }
 
   public draw(ctx: CanvasRenderingContext2D) {
