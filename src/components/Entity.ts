@@ -176,10 +176,6 @@ export class Entity implements Drawable, Updateable {
   }
 
   private fire() {
-    console.log(
-      `fire at ${this.opponent?.constructor.name}, range: ${this.isOpponentInRange()}`,
-    );
-
     const opponent = this.opponent;
 
     if (opponent && this.isOpponentInRange()) {
@@ -187,8 +183,6 @@ export class Entity implements Drawable, Updateable {
       this.projectiles.push(projectile);
 
       projectile.onHit((p) => {
-        console.log("hit");
-
         // reduce the health of the opponent
         opponent.health.remove(Math.round(Math.random() * 10000));
 
