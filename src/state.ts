@@ -7,57 +7,65 @@ import { StreunerSprite } from './sprites/Streuner.Sprite';
 import { Vector } from './utils/Vector';
 
 //  new Entity(new GoliathSprite()
+
 export const entities: Entity[] = [];
 
-//  Draw a bunch of random streuners between -500 and 500 x and y
-const randomNumberBetween = (min: number, max: number) => Math.random() * (max - min) + min;
+const streuner = new Entity(new StreunerSprite(), new Vector(200, 200));
 
-for (let i = 0; i < 100; i++) {
-  // only spawn entites outside of the viewport.
-  const width = window.innerWidth;
-  const height = window.innerHeight;
+streuner.mark(player);
+streuner.attack();
 
-  // Calculate random positions outside the viewport
-  const x = randomNumberBetween(-width, 2 * width);
-  const y = randomNumberBetween(-height, 2 * height);
+entities.push(streuner);
 
-  // Create either a Streuner or a Goliath with equal chances
+// //  Draw a bunch of random streuners between -500 and 500 x and y
+// const randomNumberBetween = (min: number, max: number) => Math.random() * (max - min) + min;
 
-  // take one random from sprite objects.
-  const sprites = [
-    {
-      sprite: new StreunerSprite(),
-      weight: 10,
-    },
-    {
-      sprite: new SentinelSprite(),
-      weight: 1,
-    },
-    {
-      sprite: new BossDevolariumSprite(),
-      weight: 1,
-    },
-  ];
+// for (let i = 0; i < 100; i++) {
+//   // only spawn entites outside of the viewport.
+//   const width = window.innerWidth;
+//   const height = window.innerHeight;
 
-  const getRandomSprite = () => {
-    const total = sprites.reduce((acc, sprite) => acc + sprite.weight, 0);
-    const random = Math.random() * total;
+//   // Calculate random positions outside the viewport
+//   const x = randomNumberBetween(-width, 2 * width);
+//   const y = randomNumberBetween(-height, 2 * height);
 
-    let sum = 0;
-    for (const sprite of sprites) {
-      sum += sprite.weight;
-      if (random < sum) {
-        return sprite.sprite;
-      }
-    }
+//   // Create either a Streuner or a Goliath with equal chances
 
-    return sprites[0].sprite as Sprite;
-  };
+//   // take one random from sprite objects.
+//   const sprites = [
+//     {
+//       sprite: new StreunerSprite(),
+//       weight: 10,
+//     },
+//     {
+//       sprite: new SentinelSprite(),
+//       weight: 1,
+//     },
+//     {
+//       sprite: new BossDevolariumSprite(),
+//       weight: 1,
+//     },
+//   ];
 
-  const entity = new Entity(getRandomSprite(), new Vector(x, y));
+//   const getRandomSprite = () => {
+//     const total = sprites.reduce((acc, sprite) => acc + sprite.weight, 0);
+//     const random = Math.random() * total;
 
-  entity.mark(player);
-  entity.attack();
+//     let sum = 0;
+//     for (const sprite of sprites) {
+//       sum += sprite.weight;
+//       if (random < sum) {
+//         return sprite.sprite;
+//       }
+//     }
 
-  entities.push(entity);
-}
+//     return sprites[0].sprite as Sprite;
+//   };
+
+//   const entity = new Entity(getRandomSprite(), new Vector(x, y));
+
+//   entity.mark(player);
+//   entity.attack();
+
+//   entities.push(entity);
+// }

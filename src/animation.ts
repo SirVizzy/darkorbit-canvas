@@ -7,10 +7,13 @@ const drawCircleAtOpponent = () => {
   const opponent = player.opponent;
   if (opponent) {
     ctx.beginPath();
-    ctx.arc(opponent.position.x, opponent.position.y, 10, 0, Math.PI * 2);
+    ctx.arc(opponent.position.x, opponent.position.y, opponent.sprite.height / 2, 0, Math.PI * 2);
     ctx.fillStyle = 'red';
+    ctx.globalAlpha = 0.5;
     ctx.fill();
   }
+
+  ctx.globalAlpha = 1;
 };
 
 const draw = () => {

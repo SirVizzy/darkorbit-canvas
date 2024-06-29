@@ -4,6 +4,69 @@ import { Updateable } from '../types/Updateable';
 import { Vector } from '../utils/Vector';
 import { Health } from './Health';
 
+class Projectile implements Drawable, Updateable {
+  public position: Vector;
+  public target: Entity;
+
+  public hit: boolean;
+
+  private firedAt: number;
+  private duration: number;
+
+  private onHitHandler: (projectile: Projectile) => void;
+
+  constructor(position: Vector, target: Entity, duration: number = 10_000) {
+    this.position = position;
+    this.target = target;
+
+    this.hit = false;
+    this.firedAt = Date.now();
+    this.duration = duration;
+
+    // TODO: Make projectile hit the target visually given the duration.
+
+    this.onHitHandler = () => {};
+  }
+
+  public draw(ctx: CanvasRenderingContext2D) {
+    ctx.save();
+    ctx.translate(this.position.x, this.position.y);
+
+    // shoot red circle
+    if (!this.hit) {
+      ctx.beginPath();
+      ctx.arc(0, 0, 5, 0, 2 * Math.PI);
+      ctx.fillStyle = 'red';
+      ctx.fill();
+    }
+
+    ctx.restore();
+  }
+
+  public update() {
+    if (!this.hit) {
+      const elapsed = Date.now() - this.firedAt;
+
+      // move the projectile towards the target
+      const distance = this.target.position.subtract(this.position);
+      const direction = distance.normalize().multiply(2);
+
+      this.position = this.position.add(direction);
+
+      if (elapsed >= this.duration || this.position.distance(this.target.position) < 10) {
+        this.onHitHandler(this);
+        this.hit = true;
+      }
+    }
+  }
+
+  public onHit(onHitHandler: (projectile: Projectile) => void) {
+    this.onHitHandler = onHitHandler;
+  }
+
+  private synchronize() {}
+}
+
 export class Entity implements Drawable, Updateable {
   public position: Vector; // position on the map
   public sprite: Sprite; // the sprite of the entity
@@ -14,6 +77,9 @@ export class Entity implements Drawable, Updateable {
 
   private angle: number; // the angle of the entity
   private health: Health; // the healthpoints of the entity
+  private projectiles: Projectile[]; // the projectiles of the entity
+
+  private firedAt: number; // the last time the entity fired
 
   constructor(sprite: Sprite, position: Vector = new Vector(0, 0)) {
     // classes
@@ -28,6 +94,10 @@ export class Entity implements Drawable, Updateable {
     this.angle = 0;
     this.attacking = false;
     this.health = new Health(20000, 10000, 0);
+
+    // projectiles
+    this.projectiles = [];
+    this.firedAt = Date.now();
   }
 
   public draw(ctx: CanvasRenderingContext2D) {
@@ -55,9 +125,14 @@ export class Entity implements Drawable, Updateable {
     ctx.fillText(`Health: ${this.health.health}`, 0, -80);
 
     ctx.restore();
+
+    // draw projectiles
+    this.projectiles.forEach((projectile) => projectile.draw(ctx));
   }
 
   public update() {
+    const now = Date.now();
+
     if (this.target) {
       const distance = this.target.subtract(this.position);
       const direction = distance.normalize().multiply(2);
@@ -79,6 +154,12 @@ export class Entity implements Drawable, Updateable {
       // angle updated. set the sprite to the correct image.
       const images = this.sprite.size();
       this.sprite.update(Math.floor((this.angle / (2 * Math.PI)) * images) % images);
+
+      // fire projectile every second
+      if (now - this.firedAt >= 1000) {
+        this.fire();
+        this.firedAt = now;
+      }
     } else if (this.target) {
       const angle = this.position.subtract(this.target).angle();
       const normalizedAngle = angle >= 0 ? angle : 2 * Math.PI + angle;
@@ -88,6 +169,9 @@ export class Entity implements Drawable, Updateable {
       const images = this.sprite.size();
       this.sprite.update(Math.floor((this.angle / (2 * Math.PI)) * images) % images);
     }
+
+    // update projectiles
+    this.projectiles.forEach((projectile) => projectile.update());
   }
 
   public move(target: Vector) {
@@ -112,5 +196,26 @@ export class Entity implements Drawable, Updateable {
   public atPositionOf(position: Vector) {
     const distance = position.subtract(this.position);
     return distance.length() < this.sprite.height / 2;
+  }
+
+  private fire() {
+    console.log(`fire at ${this.opponent?.constructor.name}, range: ${this.isOpponentInRange()}`);
+    if (this.opponent && this.isOpponentInRange()) {
+      const projectile = new Projectile(this.position, this.opponent);
+      this.projectiles.push(projectile);
+
+      projectile.onHit((p) => {
+        console.log('hit');
+        this.projectiles = this.projectiles.filter((projectile) => projectile !== p);
+      });
+    }
+  }
+
+  private isOpponentInRange() {
+    if (!this.opponent) {
+      return false;
+    }
+
+    return this.position.subtract(this.opponent.position).length() < 1000;
   }
 }
