@@ -40,6 +40,13 @@ const draw = () => {
   player.draw(ctx);
 
   ctx.restore();
+
+  // draw player urdiium and credits
+  ctx.fillStyle = 'black';
+  ctx.font = 'bold 12px Arial';
+  ctx.textAlign = 'left';
+  ctx.fillText(`Uridium: ${player.bank.uridium}`, 40, 40);
+  ctx.fillText(`Credits: ${player.bank.credits}`, 40, 60);
 };
 
 const update = () => {

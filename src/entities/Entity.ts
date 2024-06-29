@@ -3,67 +3,8 @@ import { Drawable } from '../types/Drawable';
 import { Updateable } from '../types/Updateable';
 import { Vector } from '../utils/Vector';
 import { Health } from './Health';
-
-class Projectile implements Drawable, Updateable {
-  public position: Vector;
-  public target: Entity;
-
-  public hit: boolean;
-
-  private firedAt: number;
-  private duration: number;
-
-  private onHitHandler: (projectile: Projectile) => void;
-
-  constructor(position: Vector, target: Entity, duration: number = 10_000) {
-    this.position = position;
-    this.target = target;
-
-    this.hit = false;
-    this.firedAt = Date.now();
-    this.duration = duration;
-
-    // TODO: Make projectile hit the target visually given the duration.
-
-    this.onHitHandler = () => {};
-  }
-
-  public draw(ctx: CanvasRenderingContext2D) {
-    ctx.save();
-    ctx.translate(this.position.x, this.position.y);
-
-    // shoot red circle
-    if (!this.hit) {
-      ctx.beginPath();
-      ctx.arc(0, 0, 5, 0, 2 * Math.PI);
-      ctx.fillStyle = 'red';
-      ctx.fill();
-    }
-
-    ctx.restore();
-  }
-
-  public update() {
-    if (!this.hit) {
-      const elapsed = Date.now() - this.firedAt;
-
-      // move the projectile towards the target
-      const distance = this.target.position.subtract(this.position);
-      const direction = distance.normalize().multiply(2);
-
-      this.position = this.position.add(direction);
-
-      if (elapsed >= this.duration || this.position.distance(this.target.position) < 10) {
-        this.onHitHandler(this);
-        this.hit = true;
-      }
-    }
-  }
-
-  public onHit(onHitHandler: (projectile: Projectile) => void) {
-    this.onHitHandler = onHitHandler;
-  }
-}
+import { Projectile } from './Projectile';
+import { Reward } from './Reward';
 
 export class Entity implements Drawable, Updateable {
   public position: Vector; // position on the map
@@ -78,6 +19,7 @@ export class Entity implements Drawable, Updateable {
   private projectiles: Projectile[]; // the projectiles of the entity
 
   private firedAt: number; // the last time the entity fired
+  private reward: Reward; // the reward of the entity
 
   constructor(sprite: Sprite, position: Vector, health: Health) {
     // classes
@@ -96,6 +38,8 @@ export class Entity implements Drawable, Updateable {
     // projectiles
     this.projectiles = [];
     this.firedAt = Date.now();
+
+    this.reward = new Reward(100, 100);
   }
 
   public draw(ctx: CanvasRenderingContext2D) {
@@ -225,7 +169,7 @@ export class Entity implements Drawable, Updateable {
         console.log('hit');
 
         // reduce the health of the opponent
-        opponent.health.remove(Math.round(Math.random() * 1000));
+        opponent.health.remove(Math.round(Math.random() * 10000));
 
         this.projectiles = this.projectiles.filter((projectile) => projectile !== p);
       });

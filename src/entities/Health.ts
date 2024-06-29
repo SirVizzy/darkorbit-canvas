@@ -7,14 +7,14 @@ export class Health {
     return this.health <= 0;
   }
 
-  private handleHealthEmpty: () => void;
+  private handleDeath: () => void;
 
   constructor(health: number, shield: number, hull: number) {
     this.health = health;
     this.shield = shield;
     this.hull = hull;
 
-    this.handleHealthEmpty = () => {};
+    this.handleDeath = () => {};
   }
 
   public remove(amount: number) {
@@ -39,11 +39,12 @@ export class Health {
     }
 
     if (this.health <= 0) {
-      this.handleHealthEmpty();
+      this.handleDeath();
     }
   }
 
-  public onHealthEmpty(handleHealthEmpty: () => void) {
-    this.handleHealthEmpty = handleHealthEmpty;
+  // TODO: Currently all players attacking the same entity will get the reward.
+  public onDeath(handleDeath: () => void) {
+    this.handleDeath = handleDeath;
   }
 }
