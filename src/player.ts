@@ -10,7 +10,7 @@ class Player extends Entity implements Updateable {
   public bank: Bank;
 
   constructor() {
-    super(new PhoenixSprite(), new Vector(0, 0), new Health(200000, 100000, 0), new Reward(0, 0));
+    super(new PhoenixSprite(), new Vector(0, 0), new Health(1_000_000, 1_000_000, 0), new Reward(0, 0));
 
     this.bank = new Bank(0, 0);
   }

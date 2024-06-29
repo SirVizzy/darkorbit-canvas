@@ -1,12 +1,12 @@
 import { canvas } from './canvas';
 import { player } from './player';
-import { entities } from './state';
+import { entityManager } from './state';
 import { Vector } from './utils/Vector';
 
 // Mouse.getPositionRelativeToCanvas
 
 const isMouseOnAnyEntity = (mouse: Vector) => {
-  return entities.some((entity) => entity.atPositionOf(mouse));
+  return entityManager.entities.some((entity) => entity.atPositionOf(mouse));
 };
 
 export const bindControlListeners = () => {
@@ -59,7 +59,7 @@ export const bindControlListeners = () => {
     const mouse = new Vector(x, y);
 
     let clickedOnEntity = false;
-    entities.forEach((entity) => {
+    entityManager.entities.forEach((entity) => {
       if (entity.atPositionOf(mouse)) {
         player.mark(entity);
         clickedOnEntity = true;
