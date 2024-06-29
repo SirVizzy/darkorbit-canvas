@@ -1,36 +1,38 @@
 import { canvas } from './canvas';
 import { player } from './player';
+import { entities } from './state';
 import { Vector } from './utils/Vector';
 
-// export const bindControlListeners = () => {
-//   document.addEventListener('keydown', (e) => {
-//     switch (e.key) {
-//       case 'w':
-//         player.moveTo(player.current.add(new Vector(0, -10)));
-//         break;
-//       case 'a':
-//         player.moveTo(player.current.add(new Vector(-10, 0)));
-//         break;
-//       case 's':
-//         player.moveTo(player.current.add(new Vector(0, 10)));
-//         break;
-//       case 'd':
-//         player.moveTo(player.current.add(new Vector(10, 0)));
-//         break;
-//     }
-//   });
-// };
+// Mouse.getPositionRelativeToCanvas
 
 export const bindControlListeners = () => {
-  document.addEventListener('mousedown', (e) => {
-    const move = (e: MouseEvent) => {
-      const x = e.clientX - canvas.width / 2 + player.current.x;
-      const y = e.clientY - canvas.height / 2 + player.current.y;
+  // on document click
+  document.addEventListener('click', (event) => {
+    const rect = canvas.getBoundingClientRect();
 
-      player.moveTo(new Vector(x, y));
+    const x = event.clientX - canvas.width / 2 + player.currentPosition.x;
+    const y = event.clientY - canvas.height / 2 + player.currentPosition.y;
+
+    const mouse = new Vector(x, y);
+
+    // check if clicked on entity.
+    entities.forEach((entity) => {
+      if (entity.isMouseOnEntity(mouse)) {
+        console.log('clicked on entity', entity.constructor.name);
+        // convert mark to some target where you can set selected target
+      }
+    });
+  });
+
+  document.addEventListener('mousedown', () => {
+    const move = (e: MouseEvent) => {
+      const x = e.clientX - canvas.width / 2 + player.currentPosition.x;
+      const y = e.clientY - canvas.height / 2 + player.currentPosition.y;
+
+      player.move(new Vector(x, y));
 
       // get angle and map it to a number between 1 and 16 for the sprite index
-      const angle = player.current.subtract(new Vector(x, y)).angle();
+      const angle = player.currentPosition.subtract(new Vector(x, y)).angle();
 
       // Normalize the angle to be between 0 and 2*Math.PI (0 to 360 degrees)
       let normalizedAngle = angle >= 0 ? angle : 2 * Math.PI + angle;

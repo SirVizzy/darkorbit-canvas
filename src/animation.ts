@@ -1,26 +1,19 @@
 import { canvas, ctx } from './canvas';
-import { Entity } from './entities/Entity';
-import { Streuner } from './entities/Streuner.Entity';
 import { player } from './player';
-import { GoliathSprite } from './sprites/Goliath.Sprite';
-
-const entity = new Entity(new GoliathSprite());
-
-const streuner = new Streuner();
+import { entities } from './state';
 
 const draw = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // Calculate canvas offset to center player
-  const offsetX = canvas.width / 2 - player.current.x;
-  const offsetY = canvas.height / 2 - player.current.y;
+  const offsetX = canvas.width / 2 - player.currentPosition.x;
+  const offsetY = canvas.height / 2 - player.currentPosition.y;
 
   ctx.save();
   ctx.translate(offsetX, offsetY);
 
   // Draw entities relative to the camera offset
-  entity.draw(ctx);
-  streuner.draw(ctx);
+  entities.forEach((entity) => entity.draw(ctx));
 
   // draw player on top.
   player.draw(ctx);
@@ -30,7 +23,9 @@ const draw = () => {
 
 const update = () => {
   player.update();
-  entity.update();
+
+  // update entities
+  entities.forEach((entity) => entity.update());
 };
 
 export const startAnimationLoop = () => {

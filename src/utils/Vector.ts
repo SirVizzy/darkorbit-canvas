@@ -51,6 +51,18 @@ export class Vector {
     return v.multiply(2 * this.dot(v)).subtract(this);
   }
 
+  length(): number {
+    return Math.sqrt(this.x * this.x + this.y * this.y);
+  }
+
+  equals(v: Vector, tolerance: number = 1e-5): boolean {
+    return Math.abs(this.x - v.x) < tolerance && Math.abs(this.y - v.y) < tolerance;
+  }
+
+  distance(v: Vector): number {
+    return this.subtract(v).length();
+  }
+
   toString(): string {
     return `(${this.x}, ${this.y})`;
   }
