@@ -42,6 +42,7 @@ export class EntityManager implements Updateable {
     const entity = new Entity(position);
     entity.mark(player);
     entity.attack();
+    entity.follow(); // follow instant for now, future roam() method will be added
     this.entities.push(entity);
 
     console.log(

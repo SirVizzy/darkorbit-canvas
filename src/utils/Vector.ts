@@ -1,5 +1,8 @@
 export class Vector {
-  constructor(public x: number, public y: number) {}
+  constructor(
+    public x: number,
+    public y: number,
+  ) {}
 
   add(v: Vector): Vector {
     return new Vector(this.x + v.x, this.y + v.y);
@@ -56,7 +59,9 @@ export class Vector {
   }
 
   equals(v: Vector, tolerance: number = 1e-5): boolean {
-    return Math.abs(this.x - v.x) < tolerance && Math.abs(this.y - v.y) < tolerance;
+    return (
+      Math.abs(this.x - v.x) < tolerance && Math.abs(this.y - v.y) < tolerance
+    );
   }
 
   distance(v: Vector): number {

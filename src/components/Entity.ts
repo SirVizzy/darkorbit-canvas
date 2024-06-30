@@ -8,9 +8,10 @@ import { Reward } from "./Reward";
 
 export class Entity implements Drawable, Updateable {
   public position: Vector; // position on the map
+
   public sprite: Sprite; // the sprite of the entity
 
-  public target: Vector | null; // the target position of the entity
+  public target: Vector | null; // the target position
   public opponent: Entity | null; // the entity that this entity is targeting
   public attacking: boolean; // is the entity attacking
   public health: Health; // the healthpoints of the entity
@@ -18,7 +19,7 @@ export class Entity implements Drawable, Updateable {
 
   private angle: number; // the angle of the entity
   private projectiles: Projectile[]; // the projectiles of the entity
-
+  private following: boolean; // is the entity following the target
   private firedAt: number; // the last time the entity fired
 
   constructor(
@@ -39,6 +40,7 @@ export class Entity implements Drawable, Updateable {
     this.angle = 0;
     this.attacking = false;
     this.health = health;
+    this.following = false;
 
     // projectiles
     this.projectiles = [];
@@ -98,7 +100,25 @@ export class Entity implements Drawable, Updateable {
   public update() {
     const now = Date.now();
 
-    if (this.target) {
+    if (this.opponent && this.following && !this.target) {
+      const circleCenter = this.opponent.position;
+      const circleRadius = 200; // Adjust the radius as needed
+
+      const distanceToOpponent = this.position.distance(this.opponent.position);
+
+      // Generate a random angle for the position on the circle
+      const randomAngle = Math.random() * 2 * Math.PI;
+
+      // Calculate the random position on the circle
+      const randomPosition = new Vector(
+        circleCenter.x + circleRadius * Math.cos(randomAngle),
+        circleCenter.y + circleRadius * Math.sin(randomAngle),
+      );
+
+      if (distanceToOpponent >= circleRadius) {
+        this.move(randomPosition);
+      }
+    } else if (this.target) {
       const distance = this.target.subtract(this.position);
       const direction = distance.normalize().multiply(2);
 
@@ -173,6 +193,10 @@ export class Entity implements Drawable, Updateable {
   public atPositionOf(position: Vector) {
     const distance = position.subtract(this.position);
     return distance.length() < this.sprite.height / 2;
+  }
+
+  public follow() {
+    this.following = true;
   }
 
   private fire() {
