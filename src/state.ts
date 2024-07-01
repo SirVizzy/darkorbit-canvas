@@ -21,13 +21,14 @@ export class Room implements Drawable, Updateable {
   public draw(ctx: CanvasRenderingContext2D) {
     ctx.fillStyle = "#4287f5";
     ctx.fillRect(0, 0, this.width, this.height);
+
+    this.manager.draw(ctx);
   }
 
   public update() {
     // todo: make this class responsible of keeping all entities in bounds
 
     this.manager.update();
-
     this.manager.spawnAllIn(this);
 
     // attack the player if aggresive and in range

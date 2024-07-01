@@ -1,6 +1,6 @@
 import { canvas, ctx } from "./canvas";
 import { player } from "./player";
-import { entityManager, room } from "./state";
+import { room } from "./state";
 
 // TODO: Move responsibility to the entities.
 const drawCircleAtOpponent = () => {
@@ -36,11 +36,6 @@ const draw = () => {
   ctx.translate(offsetX, offsetY);
 
   room.draw(ctx);
-
-  // Draw entities relative to the camera offset
-  entityManager.npcs.forEach((npc) => {
-    npc.draw(ctx);
-  });
 
   drawCircleAtOpponent();
 
