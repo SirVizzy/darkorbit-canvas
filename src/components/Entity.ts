@@ -2,24 +2,26 @@ import { Sprite } from "../sprites/Sprite";
 import { Drawable } from "../types/Drawable";
 import { Updateable } from "../types/Updateable";
 import { Vector } from "../utils/Vector";
+import { Damage } from "./Damage";
 import { Health } from "./Health";
 import { Projectile } from "./Projectile";
 import { Reward } from "./Reward";
 
 export class Entity implements Drawable, Updateable {
   public position: Vector; // position on the map
+  public target: Vector | null; // the target position
 
   public sprite: Sprite; // the sprite of the entity
 
-  public target: Vector | null; // the target position
   public opponent: Entity | null; // the entity that this entity is targeting
   public attacking: boolean; // is the entity attacking
   public health: Health; // the healthpoints of the entity
   public reward: Reward; // the reward of the entity
+  public damage: Damage; // the damage of the entity
 
+  public speed: number; // the speed of the entity
   private angle: number; // the angle of the entity
   private projectiles: Projectile[]; // the projectiles of the entity
-  private following: boolean; // is the entity following the target
   private firedAt: number; // the last time the entity fired
 
   constructor(
@@ -27,6 +29,8 @@ export class Entity implements Drawable, Updateable {
     position: Vector,
     health: Health,
     reward: Reward,
+    speed: number,
+    damage: Damage,
   ) {
     // classes
     this.position = position;
@@ -40,13 +44,14 @@ export class Entity implements Drawable, Updateable {
     this.angle = 0;
     this.attacking = false;
     this.health = health;
-    this.following = false;
 
     // projectiles
     this.projectiles = [];
     this.firedAt = Date.now();
 
     this.reward = reward;
+    this.speed = speed;
+    this.damage = damage;
   }
 
   public draw(ctx: CanvasRenderingContext2D) {
@@ -97,30 +102,18 @@ export class Entity implements Drawable, Updateable {
     this.projectiles.forEach((projectile) => projectile.draw(ctx));
   }
 
+  // todo: rewrite and refactor
   public update() {
     const now = Date.now();
 
-    if (this.opponent && this.following && !this.target) {
-      const circleCenter = this.opponent.position;
-      const circleRadius = 200; // Adjust the radius as needed
-
-      const distanceToOpponent = this.position.distance(this.opponent.position);
-
-      // Generate a random angle for the position on the circle
-      const randomAngle = Math.random() * 2 * Math.PI;
-
-      // Calculate the random position on the circle
-      const randomPosition = new Vector(
-        circleCenter.x + circleRadius * Math.cos(randomAngle),
-        circleCenter.y + circleRadius * Math.sin(randomAngle),
-      );
-
-      if (distanceToOpponent >= circleRadius) {
-        this.move(randomPosition);
-      }
-    } else if (this.target) {
+    if (this.target) {
       const distance = this.target.subtract(this.position);
-      const direction = distance.normalize().multiply(2);
+      const direction = distance
+        .normalize()
+        .multiply(2)
+
+        // todo: figure out how to make this accurate
+        .multiply(this.speed / 750);
 
       const isCloseEnough = distance.length() < direction.length();
 
@@ -195,10 +188,6 @@ export class Entity implements Drawable, Updateable {
     return distance.length() < this.sprite.height / 2;
   }
 
-  public follow() {
-    this.following = true;
-  }
-
   private fire() {
     const opponent = this.opponent;
 
@@ -208,7 +197,7 @@ export class Entity implements Drawable, Updateable {
 
       projectile.onHit((p) => {
         // reduce the health of the opponent
-        opponent.health.remove(Math.round(Math.random() * 10000));
+        opponent.health.remove(this.damage.value());
 
         this.projectiles = this.projectiles.filter(
           (projectile) => projectile !== p,
@@ -222,6 +211,6 @@ export class Entity implements Drawable, Updateable {
       return false;
     }
 
-    return this.position.subtract(this.opponent.position).length() < 1000;
+    return this.position.subtract(this.opponent.position).length() < 200;
   }
 }

@@ -1,6 +1,6 @@
 import { Streuner } from "./entities/Streuner.Entity";
-import { EntityManager } from "./managers/EntityManager";
+import { NPCManager } from "./managers/NPCManager";
 
-export const entityManager = new EntityManager();
+export const entityManager = new NPCManager();
 
-entityManager.register(Streuner, 5);
+entityManager.register(Streuner, 1);

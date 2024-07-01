@@ -1,11 +1,12 @@
 import { Entity } from "../components/Entity";
+import { NPC } from "../components/NPC";
 import { player } from "../player";
 import { Updateable } from "../types/Updateable";
 import { Vector } from "../utils/Vector";
 
-type EntityConstructor = new (position: Vector) => Entity;
+type EntityConstructor = new (position: Vector) => NPC;
 
-export class EntityManager implements Updateable {
+export class NPCManager implements Updateable {
   public entities: Entity[];
 
   private thresholds: Map<EntityConstructor, number>;

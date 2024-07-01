@@ -1,6 +1,8 @@
 import { Bank } from "./components/Bank";
+import { Damage } from "./components/Damage";
 import { Entity } from "./components/Entity";
 import { Health } from "./components/Health";
+import { EntityBuilder } from "./components/NPCBuilder";
 import { Reward } from "./components/Reward";
 import { PhoenixSprite } from "./sprites/Phoenix.Sprite";
 import { Updateable } from "./types/Updateable";
@@ -10,11 +12,22 @@ class Player extends Entity implements Updateable {
   public bank: Bank;
 
   constructor() {
+    const entity = new EntityBuilder()
+      .position(new Vector(0, 0))
+      .sprite(new PhoenixSprite())
+      .health(new Health(1_000_000, 1_000_000, 0))
+      .reward(new Reward(0, 0))
+      .damage(new Damage(100, 500))
+      .speed(500)
+      .build();
+
     super(
-      new PhoenixSprite(),
-      new Vector(0, 0),
-      new Health(1_000_000, 1_000_000, 0),
-      new Reward(0, 0),
+      entity.sprite,
+      entity.position,
+      entity.health,
+      entity.reward,
+      entity.speed,
+      entity.damage,
     );
 
     this.bank = new Bank(0, 0);
