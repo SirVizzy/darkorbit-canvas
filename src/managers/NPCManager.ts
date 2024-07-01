@@ -42,7 +42,7 @@ export class NPCManager implements Updateable {
     // Create a new entity of this type with the random position
     const entity = new Entity(position);
     entity.mark(player);
-    entity.attack();
+    // entity.attack();
     entity.follow(); // follow instant for now, future roam() method will be added
     this.entities.push(entity);
 

@@ -104,17 +104,18 @@ export class NPCBuilder extends EntityBuilder {
     return this;
   }
 
+  public aggressive() {
+    this._passive = false;
+    return this;
+  }
+
   public override build() {
-    if (!this._passive) {
+    if (this._passive === null) {
       throw new Error("Passive is required.");
     }
 
     const entity = super.build();
-    const npc = new NPC(entity);
-
-    if (this._passive) {
-      npc.passive();
-    }
+    const npc = new NPC(entity, this._passive);
 
     return npc;
   }

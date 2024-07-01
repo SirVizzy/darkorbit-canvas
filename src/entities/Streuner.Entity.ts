@@ -18,6 +18,6 @@ export class Streuner extends NPC {
       .passive()
       .build();
 
-    super(entity);
+    super(entity, entity._passive);
   }
 }
