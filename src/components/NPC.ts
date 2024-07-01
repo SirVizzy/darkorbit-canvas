@@ -29,35 +29,22 @@ export class NPC extends Entity implements Updateable {
       return;
     }
 
-    // if is aggressive, attack the player.
+    // attack the player if aggressive or being attacked.
     if (!this._passive || this.isBeingAttackedBy(this.opponent)) {
       this.attack();
     }
 
-    if (this.opponent && this._follow && !this.target) {
-      const circleCenter = this.opponent.position;
-      const circleRadius = 200; // Adjust the radius as needed
+    // For now just follow always 100 units behind the player, behind them meaning not in front or anything so angle maters.
+    if (this.opponent && this._follow) {
+      const distanceToFollow = 100;
+      const distance = this.position.distance(this.opponent.position);
 
-      const distanceToOpponent = this.position.distance(this.opponent.position);
-
-      // Check if within the circle and move to the border if true
-      if (distanceToOpponent < circleRadius) {
-        const angleToCenter = this.position.subtract(circleCenter).angle();
-        const borderPosition = new Vector(
-          circleCenter.x + circleRadius * Math.cos(angleToCenter),
-          circleCenter.y + circleRadius * Math.sin(angleToCenter),
-        );
-        this.move(borderPosition);
+      if (distance > distanceToFollow) {
+        // move towards the player
+        this.move(this.opponent.position);
       } else {
-        // Generate a random angle for the position on the circle
-        const randomAngle = Math.random() * 2 * Math.PI;
-
-        // Calculate the random position on the circle
-        const randomPosition = new Vector(
-          circleCenter.x + circleRadius * Math.cos(randomAngle),
-          circleCenter.y + circleRadius * Math.sin(randomAngle),
-        );
-        this.move(randomPosition);
+        // we are already close, dont move.
+        this.target = null;
       }
     }
   }

@@ -1,6 +1,6 @@
 import { canvas, ctx } from "./canvas";
 import { player } from "./player";
-import { entityManager } from "./state";
+import { entityManager, room } from "./state";
 
 // TODO: Move responsibility to the entities.
 const drawCircleAtOpponent = () => {
@@ -35,6 +35,8 @@ const draw = () => {
   ctx.save();
   ctx.translate(offsetX, offsetY);
 
+  room.draw(ctx);
+
   // Draw entities relative to the camera offset
   entityManager.entities.forEach((entity) => {
     entity.draw(ctx);
@@ -57,16 +59,7 @@ const draw = () => {
 
 const update = () => {
   player.update();
-  entityManager.entities.forEach((entity) => entity.update());
-
-  // Remove entities that are dead
-  entityManager.entities.forEach((entity, index) => {
-    if (entity.health.dead) {
-      entityManager.entities.splice(index, 1);
-    }
-  });
-
-  entityManager.update();
+  room.update();
 };
 
 export const startAnimationLoop = () => {
