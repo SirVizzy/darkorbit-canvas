@@ -1,6 +1,5 @@
 import { Entity } from "../components/Entity";
 import { NPC } from "../components/NPC";
-import { player } from "../player";
 import { Room } from "../state";
 import { Updateable } from "../types/Updateable";
 import { Vector } from "../utils/Vector";
@@ -54,11 +53,12 @@ export class NPCManager implements Updateable {
     const position = new Vector(randomX, randomY);
     // Create a new entity of this type with the random position
     const entity = new Entity(position);
-    entity.mark(player);
-    // entity.attack();
+    // entity.mark(player);
+    // // entity.attack();
     entity.follow(); // follow instant for now, future roam() method will be added
 
     // set entity's room
+    entity.roam();
     entity.setRoom(room);
 
     this.entities.push(entity);

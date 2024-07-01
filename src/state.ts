@@ -35,4 +35,4 @@ export class Room implements Drawable, Updateable {
 export const entityManager = new NPCManager();
 export const room = new Room(1000, 1000, entityManager);
 
-entityManager.register(Streuner, 1);
+entityManager.register(Streuner, 5);

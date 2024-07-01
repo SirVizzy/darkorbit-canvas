@@ -26,7 +26,7 @@ export class Entity implements Drawable, Updateable {
   private projectiles: Projectile[]; // the projectiles of the entity
   private firedAt: number; // the last time the entity fired
 
-  private attackers: Set<Entity>; // the entities that are attacking this entity
+  public attackers: Set<Entity>; // the entities that are attacking this entity
 
   constructor(
     sprite: Sprite,
@@ -57,8 +57,8 @@ export class Entity implements Drawable, Updateable {
     this.speed = speed;
     this.damage = damage;
 
-    this.attackers = new Set();
     this.room = null;
+    this.attackers = new Set();
   }
 
   public draw(ctx: CanvasRenderingContext2D) {
@@ -195,19 +195,17 @@ export class Entity implements Drawable, Updateable {
       return;
     }
 
+    this.opponent.attackers.add(this);
     this.attacking = true;
-
-    // notify the opponent that it is being attacked
-    this.opponent.onHitBy(this);
   }
 
   public peace() {
-    this.attacking = false;
-
     if (this.opponent) {
-      // notify the opponent that it is not being attacked anymore
-      this.opponent.onPeaceWith(this);
+      this.opponent.attackers.delete(this);
     }
+
+    this.attacking = false;
+    this.opponent = null;
   }
 
   public setRoom(room: Room) {
@@ -222,22 +220,6 @@ export class Entity implements Drawable, Updateable {
   public atPositionOf(position: Vector) {
     const distance = position.subtract(this.position);
     return distance.length() < this.sprite.height / 2;
-  }
-
-  public onHitBy(entity: Entity) {
-    this.attackers.add(entity);
-  }
-
-  public onPeaceWith(entity: Entity) {
-    this.attackers.delete(entity);
-  }
-
-  public isBeingAttackedBy(entity: Entity) {
-    return this.attackers.has(entity);
-  }
-
-  public getLastAttacker() {
-    return Array.from(this.attackers)[this.attackers.size - 1];
   }
 
   private fire() {

@@ -14,7 +14,7 @@ class Player extends Entity implements Updateable {
 
   constructor() {
     const entity = new EntityBuilder()
-      .position(new Vector(0, 0))
+      .position(new Vector(500, 500))
       .sprite(new PhoenixSprite())
       .health(new Health(1_000_000, 1_000_000, 0))
       .reward(new Reward(0, 0))
