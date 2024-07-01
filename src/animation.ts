@@ -38,8 +38,8 @@ const draw = () => {
   room.draw(ctx);
 
   // Draw entities relative to the camera offset
-  entityManager.entities.forEach((entity) => {
-    entity.draw(ctx);
+  entityManager.npcs.forEach((npc) => {
+    npc.draw(ctx);
   });
 
   drawCircleAtOpponent();

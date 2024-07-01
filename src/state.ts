@@ -1,5 +1,6 @@
-import { Streuner } from "./entities/Streuner.Entity";
+import { BossDevolarium, Streuner } from "./entities/npcs/Streuner.NPC";
 import { NPCManager } from "./managers/NPCManager";
+import { player } from "./player";
 import { Drawable } from "./types/Drawable";
 import { Updateable } from "./types/Updateable";
 
@@ -8,7 +9,7 @@ export class Room implements Drawable, Updateable {
   public width: number;
   public height: number;
 
-  private manager: NPCManager;
+  public manager: NPCManager;
 
   constructor(width: number, height: number, manager: NPCManager) {
     this.width = width;
@@ -23,16 +24,24 @@ export class Room implements Drawable, Updateable {
   }
 
   public update() {
-    // spawn new entities if needed
+    // todo: make this class responsible of keeping all entities in bounds
 
     this.manager.update();
+
     this.manager.spawnAllIn(this);
 
-    // entityManager.update();
+    // attack the player if aggresive and in range
+    for (const npc of this.manager.npcs) {
+      if (npc.inRangeOf(player) && npc.isAggressive() && npc.isNotAttacking()) {
+        npc.mark(player);
+        npc.attack();
+      }
+    }
   }
 }
 
 export const entityManager = new NPCManager();
-export const room = new Room(1000, 1000, entityManager);
+export const room = new Room(10000, 10000, entityManager);
 
-entityManager.register(Streuner, 5);
+entityManager.register(Streuner, 1000);
+entityManager.register(BossDevolarium, 0);

@@ -1,18 +1,17 @@
-import { Entity } from "../components/Entity";
 import { NPC } from "../components/NPC";
 import { Room } from "../state";
 import { Updateable } from "../types/Updateable";
 import { Vector } from "../utils/Vector";
 
-type EntityConstructor = new (position: Vector) => NPC;
+type Constructor = new (position: Vector) => NPC;
 
 export class NPCManager implements Updateable {
-  public entities: Entity[];
+  public npcs: NPC[];
 
-  private thresholds: Map<EntityConstructor, number>;
+  private thresholds: Map<Constructor, number>;
 
   constructor() {
-    this.entities = [];
+    this.npcs = [];
     this.thresholds = new Map();
   }
 
@@ -22,37 +21,36 @@ export class NPCManager implements Updateable {
   }
 
   public spawnAllIn(room: Room) {
-    for (const [Entity, threshold] of this.thresholds) {
-      if (this.countOf(Entity) < threshold) {
-        this.spawn(Entity, room);
+    for (const [NPC, threshold] of this.thresholds) {
+      if (this.countOf(NPC) < threshold) {
+        this.spawn(NPC, room);
       }
     }
   }
 
-  public register(Entity: EntityConstructor, threshold: number) {
-    this.thresholds.set(Entity, threshold);
+  public register(NPC: Constructor, threshold: number) {
+    this.thresholds.set(NPC, threshold);
   }
 
   private updateAll() {
-    this.entities.forEach((entity) => entity.update());
+    this.npcs.forEach((npc) => npc.update());
   }
 
   private removeAllDead() {
-    this.entities = this.entities.filter((entity) => !entity.health.dead);
+    this.npcs = this.npcs.filter((npc) => !npc.health.dead);
   }
 
-  private countOf(constructor: EntityConstructor) {
-    return this.entities.filter((entity) => entity instanceof constructor)
-      .length;
+  private countOf(constructor: Constructor) {
+    return this.npcs.filter((npc) => npc instanceof constructor).length;
   }
 
-  private spawn(Entity: EntityConstructor, room: Room) {
+  private spawn(NPC: Constructor, room: Room) {
     const randomX = Math.random() * room.width;
     const randomY = Math.random() * room.height;
 
     const position = new Vector(randomX, randomY);
     // Create a new entity of this type with the random position
-    const entity = new Entity(position);
+    const entity = new NPC(position);
     // entity.mark(player);
     // // entity.attack();
     entity.follow(); // follow instant for now, future roam() method will be added
@@ -61,9 +59,9 @@ export class NPCManager implements Updateable {
     entity.roam();
     entity.setRoom(room);
 
-    this.entities.push(entity);
+    this.npcs.push(entity);
     console.log(
-      `New ${Entity.name} created at (${randomX}, ${randomY}). Total ${Entity.name}s: ${this.countOf(Entity)}`,
+      `New ${NPC.name} created at (${randomX}, ${randomY}). Total ${NPC.name}s: ${this.countOf(NPC)}`,
     );
   }
 }

@@ -98,6 +98,11 @@ export class Entity implements Drawable, Updateable {
       this.sprite.height - 50,
     );
 
+    // if attacking add some text of target attacking
+    if (this.opponent && this.attacking) {
+      ctx.fillText(`Attacking: ${this.opponent.constructor.name}`, 0, -120);
+    }
+
     // draw text healthpoints above playter
     ctx.fillText(`Hull: ${this.health.hull}`, 0, -100);
     ctx.fillText(`Shield: ${this.health.shield}`, 0, -60);
@@ -246,5 +251,9 @@ export class Entity implements Drawable, Updateable {
     }
 
     return this.position.subtract(this.opponent.position).length() < 1000;
+  }
+
+  public inRangeOf(entity: Entity) {
+    return this.position.distance(entity.position) < 100;
   }
 }

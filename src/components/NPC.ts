@@ -35,7 +35,6 @@ export class NPC extends Entity implements Updateable {
   public update() {
     super.update();
 
-    // if has attacker, attack them.
     if (this.attackers.size > 0) {
       const firstAttackerInList = Array.from(this.attackers)[0];
       if (this.attacker !== firstAttackerInList) {
@@ -97,5 +96,13 @@ export class NPC extends Entity implements Updateable {
   public roam() {
     // todo: all npc sshould roam, but if an attackable enemy is in range, they should attack.
     this._roam = true;
+  }
+
+  public isAggressive() {
+    return !this._passive;
+  }
+
+  public isNotAttacking() {
+    return !this.attacking;
   }
 }
