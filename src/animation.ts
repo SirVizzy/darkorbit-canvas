@@ -25,9 +25,6 @@ const drawCircleAtOpponent = () => {
 const draw = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = "white";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
   // Calculate canvas offset to center player
   const offsetX = canvas.width / 2 - player.position.x;
   const offsetY = canvas.height / 2 - player.position.y;
@@ -45,7 +42,7 @@ const draw = () => {
   ctx.restore();
 
   // draw player urdiium and credits
-  ctx.fillStyle = "black";
+  ctx.fillStyle = "white";
   ctx.font = "bold 12px Arial";
   ctx.textAlign = "left";
   ctx.fillText(`Uridium: ${player.bank.uridium}`, 40, 40);

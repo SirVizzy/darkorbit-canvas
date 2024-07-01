@@ -13,12 +13,12 @@ export class Player extends Entity implements Updateable {
 
   constructor() {
     const entity = new EntityBuilder()
-      .position(new Vector(500, 500))
+      .position(new Vector(5000, 5000))
       .sprite(new PhoenixSprite())
       .health(new Health(1_000_000, 1_000_000, 0))
       .reward(new Reward(0, 0))
       .damage(new Damage(100, 500))
-      .speed(500)
+      .speed(1000)
       .build();
 
     super(

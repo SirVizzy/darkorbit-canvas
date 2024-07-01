@@ -1,6 +1,6 @@
 import { NPC } from "../components/NPC";
 import { player } from "../player";
-import { Room } from "../state";
+import { Room, isInPlayerView } from "../state";
 import { Drawable } from "../types/Drawable";
 import { Updateable } from "../types/Updateable";
 import { Vector } from "../utils/Vector";
@@ -25,8 +25,11 @@ export class NPCManager implements Updateable, Drawable {
   public draw(ctx: CanvasRenderingContext2D) {
     this.npcs.forEach((npc) => {
       // For performance considerations only draw NPCs that are close to the player.
-      const distance = npc.position.distance(player.position);
-      if (distance < 1000 || player.opponent === npc) {
+      if (
+        isInPlayerView(npc.position) ||
+        player.opponent === npc ||
+        npc.opponent === player
+      ) {
         npc.draw(ctx);
       }
     });

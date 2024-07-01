@@ -68,7 +68,7 @@ export class Entity implements Drawable, Updateable {
 
     if (this.health.dead) {
       // Draw death animation (example: replace with actual animation logic)
-      ctx.fillStyle = "black";
+      ctx.fillStyle = "white";
       ctx.font = "bold 100px Arial";
       ctx.textAlign = "center";
       ctx.fillText("☠️", 0, 0);
@@ -80,7 +80,7 @@ export class Entity implements Drawable, Updateable {
 
     ctx.save();
     ctx.translate(this.position.x, this.position.y);
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "white";
     ctx.font = "bold 12px Arial";
     ctx.textAlign = "center";
 
