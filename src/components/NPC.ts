@@ -69,8 +69,6 @@ export class NPC extends Entity implements Updateable {
         // set new random roam time.
         this._roamCooldown = Math.random() * 2000 + 1000; // Roam every 1-3 seconds
 
-        console.log("roam time!");
-
         // TODO: Don't roam out of map bounds.
 
         const roamRadius = 100; // Roam within a radius of 50 units

@@ -5,6 +5,7 @@ import { Health } from "../components/Health";
 import { EntityBuilder } from "../components/NPCBuilder";
 import { Reward } from "../components/Reward";
 import { PhoenixSprite } from "../sprites/Phoenix.Sprite";
+import { room } from "../state";
 import { Updateable } from "../types/Updateable";
 import { Vector } from "../utils/Vector";
 
@@ -13,7 +14,7 @@ export class Player extends Entity implements Updateable {
 
   constructor() {
     const entity = new EntityBuilder()
-      .position(new Vector(5000, 5000))
+      .position(new Vector(room.width / 2, room.height / 2))
       .sprite(new PhoenixSprite())
       .health(new Health(1_000_000, 1_000_000, 0))
       .reward(new Reward(0, 0))

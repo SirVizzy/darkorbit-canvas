@@ -1,6 +1,7 @@
 import { NPC } from "../components/NPC";
+import { Room } from "../components/Room";
 import { player } from "../player";
-import { Room, isInPlayerView } from "../state";
+import { isInPlayerView } from "../state";
 import { Drawable } from "../types/Drawable";
 import { Updateable } from "../types/Updateable";
 import { Vector } from "../utils/Vector";
@@ -72,7 +73,6 @@ export class NPCManager implements Updateable, Drawable {
 
     // set entity's room
     entity.roam();
-    entity.setRoom(room);
 
     this.npcs.push(entity);
     console.log(

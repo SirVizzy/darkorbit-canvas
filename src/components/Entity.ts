@@ -1,5 +1,4 @@
 import { Sprite } from "../sprites/Sprite";
-import { Room } from "../state";
 import { Drawable } from "../types/Drawable";
 import { Updateable } from "../types/Updateable";
 import { Vector } from "../utils/Vector";
@@ -7,6 +6,7 @@ import { Damage } from "./Damage";
 import { Health } from "./Health";
 import { Projectile } from "./Projectile";
 import { Reward } from "./Reward";
+import { Room } from "./Room";
 
 export class Entity implements Drawable, Updateable {
   public position: Vector; // position on the map
@@ -19,7 +19,6 @@ export class Entity implements Drawable, Updateable {
   public health: Health; // the healthpoints of the entity
   public reward: Reward; // the reward of the entity
   public damage: Damage; // the damage of the entity
-  public room: Room | null; // the room of the entity
 
   public speed: number; // the speed of the entity
   private angle: number; // the angle of the entity
@@ -57,7 +56,6 @@ export class Entity implements Drawable, Updateable {
     this.speed = speed;
     this.damage = damage;
 
-    this.room = null;
     this.attackers = new Set();
   }
 
@@ -117,21 +115,6 @@ export class Entity implements Drawable, Updateable {
   // todo: rewrite and refactor
   public update() {
     const now = Date.now();
-
-    // keep entity within the bounds of the room.
-    if (this.room) {
-      if (this.position.x < 0) {
-        this.position.x = 0;
-      } else if (this.position.x > this.room.width) {
-        this.position.x = this.room.width;
-      }
-
-      if (this.position.y < 0) {
-        this.position.y = 0;
-      } else if (this.position.y > this.room.height) {
-        this.position.y = this.room.height;
-      }
-    }
 
     if (this.target) {
       const distance = this.target.subtract(this.position);
@@ -213,10 +196,6 @@ export class Entity implements Drawable, Updateable {
     this.opponent = null;
   }
 
-  public setRoom(room: Room) {
-    this.room = room;
-  }
-
   public mark(opponent: Entity) {
     this.opponent = opponent;
     this.attacking = false;
@@ -255,5 +234,23 @@ export class Entity implements Drawable, Updateable {
 
   public inRangeOf(entity: Entity) {
     return this.position.distance(entity.position) < 100;
+  }
+
+  public inBoundsOf(room: Room) {
+    if (this.position.x < 0) {
+      this.position.x = 0;
+    }
+
+    if (this.position.y < 0) {
+      this.position.y = 0;
+    }
+
+    if (this.position.x > room.width) {
+      this.position.x = room.width;
+    }
+
+    if (this.position.y > room.height) {
+      this.position.y = room.height;
+    }
   }
 }

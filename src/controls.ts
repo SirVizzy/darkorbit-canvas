@@ -1,12 +1,12 @@
 import { canvas } from "./canvas";
 import { player } from "./player";
-import { entityManager } from "./state";
+import { room } from "./state";
 import { Vector } from "./utils/Vector";
 
 // Mouse.getPositionRelativeToCanvas
 
 const isMouseOnAnyEntity = (mouse: Vector) => {
-  return entityManager.npcs.some((npc) => npc.atPositionOf(mouse));
+  return room.manager.npcs.some((npc) => npc.atPositionOf(mouse));
 };
 
 export const bindControlListeners = () => {
@@ -59,7 +59,7 @@ export const bindControlListeners = () => {
     const mouse = new Vector(x, y);
 
     let clickedOnEntity = false;
-    entityManager.npcs.forEach((npcs) => {
+    room.manager.npcs.forEach((npcs) => {
       if (npcs.atPositionOf(mouse)) {
         player.mark(npcs);
         clickedOnEntity = true;
