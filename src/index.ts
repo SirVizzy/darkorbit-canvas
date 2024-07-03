@@ -1,6 +1,7 @@
 import { startAnimationLoop } from "./animation";
 import { setupCanvas } from "./canvas";
 import { bindControlListeners } from "./controls";
+import { player } from "./player";
 import { save } from "./save";
 import { isGamePaused, pauseGame, resumeGame } from "./state";
 
@@ -36,9 +37,14 @@ const openShop = () => {
   if (shop) {
     shop.showModal();
 
+    const uridium = document.getElementById("uridium") as HTMLSpanElement;
+    const credits = document.getElementById("credits") as HTMLSpanElement;
+
+    uridium.textContent = player.bank.uridium.toString();
+    credits.textContent = player.bank.credits.toString();
+
     const callback = () => {
       resumeGame();
-      console.log("Shop closed");
     };
 
     shop.addEventListener("close", callback, { once: true });
