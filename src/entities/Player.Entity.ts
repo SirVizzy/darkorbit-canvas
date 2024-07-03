@@ -6,10 +6,11 @@ import { EntityBuilder } from "../components/NPCBuilder";
 import { Reward } from "../components/Reward";
 import { PhoenixSprite } from "../sprites/Phoenix.Sprite";
 import { room } from "../state";
+import { Serializable } from "../types/Serializable";
 import { Updateable } from "../types/Updateable";
 import { Vector } from "../utils/Vector";
 
-export class Player extends Entity implements Updateable {
+export class Player extends Entity implements Updateable, Serializable {
   public bank: Bank;
 
   constructor() {
@@ -40,6 +41,27 @@ export class Player extends Entity implements Updateable {
     if (this.opponent && this.opponent.health.dead) {
       this.onEnemyKilled(this.opponent);
     }
+  }
+
+  public serialize() {
+    return JSON.stringify({
+      position: this.position.serialize(),
+      bank: this.bank.serialize(),
+    });
+  }
+
+  public static deserialize(data: string) {
+    const state = JSON.parse(data);
+
+    const player = new Player();
+
+    // Load position.
+    player.position = Vector.deserialize(state.position);
+
+    // Load bank.
+    player.bank = Bank.deserialize(state.bank);
+
+    return player;
   }
 
   private onEnemyKilled(opponent: Entity) {

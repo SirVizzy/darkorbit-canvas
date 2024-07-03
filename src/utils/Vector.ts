@@ -1,4 +1,6 @@
-export class Vector {
+import { Serializable } from "../types/Serializable";
+
+export class Vector implements Serializable {
   constructor(
     public x: number,
     public y: number,
@@ -66,6 +68,15 @@ export class Vector {
 
   distance(v: Vector): number {
     return this.subtract(v).length();
+  }
+
+  serialize(): string {
+    return JSON.stringify(this);
+  }
+
+  static deserialize(data: string): Vector {
+    const { x, y } = JSON.parse(data);
+    return new Vector(x, y);
   }
 
   toString(): string {
