@@ -10,7 +10,6 @@ startAnimationLoop();
 
 window.addEventListener("beforeunload", save);
 
-// if player hits b key spawn a dialog
 window.addEventListener("keydown", (event) => {
   if (event.key === "p") {
     if (isGamePaused()) {
@@ -19,4 +18,29 @@ window.addEventListener("keydown", (event) => {
       pauseGame();
     }
   }
+
+  if (event.key === "s") {
+    ensureGameIsPaused();
+    openShop();
+  }
 });
+
+const ensureGameIsPaused = () => {
+  if (!isGamePaused()) {
+    pauseGame();
+  }
+};
+
+const openShop = () => {
+  const shop = document.getElementById("shop") as HTMLDialogElement;
+  if (shop) {
+    shop.showModal();
+
+    const callback = () => {
+      resumeGame();
+      console.log("Shop closed");
+    };
+
+    shop.addEventListener("close", callback, { once: true });
+  }
+};
