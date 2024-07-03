@@ -1,8 +1,6 @@
 import { Serializable } from "../types/Serializable";
 
 export class Bank implements Serializable {
-  // user can have uridium and credits
-
   public uridium: number;
   public credits: number;
 

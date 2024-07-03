@@ -1,6 +1,6 @@
 import { canvas, ctx } from "./canvas";
 import { player } from "./player";
-import { room } from "./state";
+import { isGamePaused, room } from "./state";
 
 // TODO: Move responsibility to the entities.
 const drawCircleAtOpponent = () => {
@@ -56,8 +56,10 @@ const update = () => {
 
 export const startAnimationLoop = () => {
   const loop = () => {
-    draw();
-    update();
+    if (!isGamePaused()) {
+      draw();
+      update();
+    }
 
     requestAnimationFrame(loop);
   };
