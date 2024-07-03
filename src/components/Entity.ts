@@ -215,6 +215,11 @@ export class Entity implements Drawable, Updateable {
 
       projectile.onHit((p) => {
         // reduce the health of the opponent
+
+        console.log(
+          `${this.constructor.name} hit ${opponent.constructor.name} for ${this.damage.value()}`,
+        );
+
         opponent.health.remove(this.damage.value());
 
         this.projectiles = this.projectiles.filter(
