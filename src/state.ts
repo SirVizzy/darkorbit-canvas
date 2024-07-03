@@ -31,7 +31,7 @@ export class Room implements Drawable, Updateable {
     this.manager = manager;
 
     // generate stars
-    for (let i = 0; i < 500; i++) {
+    for (let i = 0; i < 5000; i++) {
       const x = Math.random() * this.width;
       const y = Math.random() * this.height;
 

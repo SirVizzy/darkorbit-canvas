@@ -17,7 +17,7 @@ export class Player extends Entity implements Updateable {
       .sprite(new PhoenixSprite())
       .health(new Health(1_000_000, 1_000_000, 0))
       .reward(new Reward(0, 0))
-      .damage(new Damage(100, 500))
+      .damage(new Damage(10_000, 15_000))
       .speed(1000)
       .build();
 
