@@ -1,14 +1,17 @@
-import WebSocket from 'ws';
+import { setupCanvas } from "../../client/src/canvas";
+import WebSocket from "ws";
+
+setupCanvas();
 
 const TICK_RATE = 60;
 const PORT = 8080;
 
 const server = new WebSocket.Server({ port: PORT });
 
-server.on('connection', (socket) => {
-  console.log('Client connected');
-  socket.on('message', (message) => {
-    console.log('Received:', message);
+server.on("connection", (socket) => {
+  console.log("Client connected");
+  socket.on("message", (message) => {
+    console.log("Received:", message);
   });
 });
 
@@ -16,9 +19,7 @@ server.on('connection', (socket) => {
 setInterval(() => {
   server.clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
-
-      const isTest = "dasda"
-      client.send('tick');
+      client.send("tick");
     }
   });
 }, 1000 / TICK_RATE);
