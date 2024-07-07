@@ -23,6 +23,8 @@ export const bindControlListeners = () => {
     }
   });
 
+  const isAString = "poopie";
+
   // Handle mouse up event
   document.addEventListener("mouseup", (event) => {
     if (event.button === 0) {

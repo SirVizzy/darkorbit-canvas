@@ -16,6 +16,8 @@ server.on('connection', (socket) => {
 setInterval(() => {
   server.clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
+
+      const isTest = "dasda"
       client.send('tick');
     }
   });
