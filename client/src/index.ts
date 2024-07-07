@@ -5,6 +5,7 @@ import { bindControlListeners } from "./controls";
 import { player } from "./player";
 import { save } from "./save";
 import { isGamePaused, pauseGame, resumeGame } from "./state";
+import "./socket";
 
 setupCanvas();
 bindControlListeners();
