@@ -2,23 +2,13 @@
   "name": "darkorbit-canvas",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "https://github.com/SirVizzy/darkorbit-canvas.git",
-  "author": "Martin <viziousdev@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "@eslint/js": "^9.6.0",
-    "@stylistic/eslint-plugin-js": "^2.3.0",
-    "@typescript-eslint/parser": "^7.15.0",
-    "eslint": "^9.6.0",
+    "eslint": "9.x",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-import-resolver-alias": "^1.1.2",
-    "eslint-import-resolver-typescript": "^3.6.1",
-    "eslint-plugin-boundaries": "^4.2.2",
-    "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-prettier": "^5.1.3",
     "globals": "^15.8.0",
-    "prettier": "^3.3.2",
-    "typescript": "^5.5.3",
     "typescript-eslint": "^7.15.0"
   }
 }

@@ -1,1 +1,0 @@
-export const importable = () => console.log('importable');

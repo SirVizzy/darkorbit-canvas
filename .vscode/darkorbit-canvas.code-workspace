@@ -6,11 +6,11 @@
     },
     {
       "name": "game-client",
-      "path": "../client",
+      "path": "../game-client/src",
     },
     {
       "name": "game-server",
-      "path": "../server",
+      "path": "../game-server/src",
     },
     {
       "name": "common",
