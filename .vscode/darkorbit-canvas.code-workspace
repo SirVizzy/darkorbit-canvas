@@ -1,0 +1,26 @@
+{
+  "folders": [
+    {
+      "name": "root",
+      "path": "../",
+    },
+    {
+      "name": "game-client",
+      "path": "../client",
+    },
+    {
+      "name": "game-server",
+      "path": "../server",
+    },
+    {
+      "name": "common",
+      "path": "../common",
+    },
+  ],
+  "settings": {
+    "files.exclude": {
+      "node_modules/": true,
+      "dist/": true,
+    },
+  },
+}
