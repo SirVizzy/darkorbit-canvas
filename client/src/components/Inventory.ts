@@ -1,5 +1,4 @@
-import { sum } from "../utils/helpers/array/sum";
-
+import { sum } from "@common/array/sum";
 export class Loadout {
   public lasers: Laser[];
 
