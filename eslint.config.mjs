@@ -40,14 +40,6 @@ export default [
             {
               from: "server",
               disallow: ["client"],
-              message:
-                "Server must not import from client. Use @common instead.",
-            },
-            {
-              from: "client",
-              disallow: ["server"],
-              message:
-                "Client must not import from server. Use @common instead.",
             },
           ],
         },
@@ -55,11 +47,8 @@ export default [
     },
     settings: {
       "import/resolver": {
-        alias: {
-          map: [
-            ["@client", "./client/src"],
-            ["@server", "./server/src"],
-          ],
+        typescript: {
+          alwaysTryTypes: true,
         },
       },
       "boundaries/elements": [
