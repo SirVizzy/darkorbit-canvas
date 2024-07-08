@@ -1,7 +1,4 @@
-import { setupCanvas } from "../../client/src/canvas";
 import WebSocket from "ws";
-
-setupCanvas();
 
 const TICK_RATE = 60;
 const PORT = 8080;

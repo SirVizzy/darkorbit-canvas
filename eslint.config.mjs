@@ -6,6 +6,7 @@ import prettierPlugin from "eslint-plugin-prettier";
 import importPlugin from "eslint-plugin-import";
 import stylisticJs from "@stylistic/eslint-plugin-js";
 import boundariesPlugin from "eslint-plugin-boundaries";
+import tsParser from "@typescript-eslint/parser";
 
 export default [
   {
@@ -14,6 +15,7 @@ export default [
       globals: {
         ...globals.browser,
       },
+      parser: tsParser,
     },
     plugins: {
       prettier: prettierPlugin,
@@ -40,6 +42,14 @@ export default [
             {
               from: "server",
               disallow: ["client"],
+              message:
+                "Do not import from client into server. Use @common instead.",
+            },
+            {
+              from: "client",
+              disallow: ["server"],
+              message:
+                "Do not import from server into client. Use @common instead.",
             },
           ],
         },
