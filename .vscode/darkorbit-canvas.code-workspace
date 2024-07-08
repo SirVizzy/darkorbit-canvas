@@ -2,26 +2,26 @@
   "folders": [
     {
       "name": "root",
-      "path": "../",
+      "path": "../"
     },
     {
       "name": "game-client",
-      "path": "../game-client/src",
+      "path": "../game-client/src"
     },
     {
       "name": "game-server",
-      "path": "../game-server/src",
+      "path": "../game-server/src"
     },
     {
       "name": "common",
-      "path": "../common",
-    },
+      "path": "../common"
+    }
   ],
   "settings": {
     "files.exclude": {
       "node_modules/": true,
-      "dist/": true,
+      "dist/": true
     },
-    "editor.formatOnSave": true,
-  },
+    "editor.formatOnSave": true
+  }
 }

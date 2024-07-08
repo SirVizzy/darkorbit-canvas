@@ -1,1 +1,1 @@
-export const iAmCommon = true;
+export const I_AM_COMMON = 1;

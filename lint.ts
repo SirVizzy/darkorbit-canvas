@@ -1,1 +1,0 @@
-const amIBeingLinted = "yes";
